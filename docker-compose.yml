@@ -3,10 +3,13 @@ version: "3.9"
 services:
   accesslog:
     image: diamol/ch04-access-log
+    networks:
+      - images-net
+
   iotd:
     image: diamol/ch04-image-of-the-day
     ports:
-      - 8080:80
+      - "8080:80"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost/image" ]
       interval: 5s
@@ -24,7 +27,16 @@ services:
         parallelism: 4
         order: start-first
         failure_action: continue
+    networks:
+      - images-net
+
   gallery:
     image: diamol/ch04-image-gallery
     ports:
       - 80:80
+    networks:
+      - images-net
+
+networks:
+  images-net:
+    name: images-net
